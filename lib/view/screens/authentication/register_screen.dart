@@ -2,8 +2,14 @@ import 'package:arman_ecommerce_node_backend/view/screens/authentication/login_s
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isPasswordVisible = false; // Password visibility state
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +81,7 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         )),
                   ),
-              
+
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
@@ -111,7 +117,7 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         )),
                   ),
-              
+
                   const SizedBox(height: 5),
                   Align(
                     alignment: Alignment.topLeft,
@@ -129,6 +135,7 @@ class RegisterScreen extends StatelessWidget {
                         return null;
                       }
                     },
+                    obscureText: !_isPasswordVisible,
                     decoration: InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
@@ -147,7 +154,16 @@ class RegisterScreen extends StatelessWidget {
                             height: 20,
                           ),
                         ),
-                        suffixIcon: const Icon(Icons.visibility)),
+                        suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible; // Toggle visibility
+                              });
+                            },
+                            icon: Icon(_isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off)),
+                    ),
                   ),
                    SizedBox(height: MediaQuery.of(context).size.height * 0.08),
                   InkWell(
@@ -287,9 +303,9 @@ class RegisterScreen extends StatelessWidget {
                         )
                     ),
                   ),
-              
+
                   const SizedBox(height: 20),
-              
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -319,9 +335,9 @@ class RegisterScreen extends StatelessWidget {
                       )
                     ],
                   )
-              
-              
-              
+
+
+
                 ],
               ),
             ),
