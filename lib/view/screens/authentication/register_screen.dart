@@ -1,3 +1,4 @@
+import 'package:arman_ecommerce_node_backend/controller/auth_controller.dart';
 import 'package:arman_ecommerce_node_backend/view/screens/authentication/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,6 +11,10 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false; // Password visibility state
+  final AuthController _authController = AuthController();
+  late String email;
+  late String fullName;
+  late String password;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +60,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   TextFormField(
+                    onChanged: (value) {
+                      email = value;
+                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your Email";
@@ -91,6 +99,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   TextFormField(
+                    onChanged: (value) {
+                      fullName = value;
+                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your Full Name";
@@ -128,6 +139,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   TextFormField(
+                    onChanged: (value) {
+                      password = value;
+                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your Password";
@@ -167,12 +181,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                    SizedBox(height: MediaQuery.of(context).size.height * 0.08),
                   InkWell(
-                    onTap: () {
+                    onTap: () async {
                       if (_formKey.currentState!.validate()) {
-                        print("correct");
-                      } else  {
-                        print("Failed");
-                      }
+                        await _authController.signUpUsers(context: context, email: email, fullName: fullName, password: password);
+                        }
                     },
                     child: Container(
                         width: 319,
