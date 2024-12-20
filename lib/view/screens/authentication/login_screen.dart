@@ -1,8 +1,11 @@
+import 'package:arman_ecommerce_node_backend/controller/auth_controller.dart';
 import 'package:arman_ecommerce_node_backend/view/screens/authentication/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -10,6 +13,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false; // Password visibility state
+  final AuthController _authController = AuthController();
+  late String email;
+  late String password;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +61,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   TextFormField(
+                    onChanged: (value) {
+                      email = value;
+                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your Email";
@@ -83,6 +92,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 5),
                   TextFormField(
+                    onChanged: (value) {
+                      password = value;
+                    },
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your Password";
@@ -122,9 +134,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 20),
                   InkWell(
-                    onTap: () {
+                    onTap: () async {
                       if (_globalKey.currentState!.validate()) {
-                        print("Correct");
+                        await _authController.signInUsers(context: context, email: email, password: password);
                       } else {
                         print("Failed");
                       }

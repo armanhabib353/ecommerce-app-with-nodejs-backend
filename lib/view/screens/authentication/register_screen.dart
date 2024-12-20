@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
+
+
+
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
@@ -15,6 +19,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late String email;
   late String fullName;
   late String password;
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onChanged: (value) {
                       email = value;
                     },
+                    controller: emailController,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your Email";
@@ -102,6 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onChanged: (value) {
                       fullName = value;
                     },
+                    controller: nameController,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your Full Name";
@@ -142,6 +152,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onChanged: (value) {
                       password = value;
                     },
+                    controller: passwordController,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your Password";
@@ -184,7 +195,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onTap: () async {
                       if (_formKey.currentState!.validate()) {
                         await _authController.signUpUsers(context: context, email: email, fullName: fullName, password: password);
-                        }
+                        nameController.clear();
+                        emailController.clear();
+                        passwordController.clear();
+                      }
                     },
                     child: Container(
                         width: 319,
@@ -321,7 +335,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("Allready have an Account? ",
+                      Text("Already have an Account? ",
                         style: GoogleFonts.lato(
                             textStyle: const TextStyle(
                               color: Colors.black,
