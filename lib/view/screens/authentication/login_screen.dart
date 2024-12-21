@@ -1,6 +1,7 @@
 import 'package:arman_ecommerce_node_backend/controller/auth_controller.dart';
 import 'package:arman_ecommerce_node_backend/view/screens/authentication/register_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,6 +17,19 @@ class _LoginScreenState extends State<LoginScreen> {
   final AuthController _authController = AuthController();
   late String email;
   late String password;
+  bool isLoading = false;
+
+  loginUser() async {
+    setState(() {
+      isLoading = true;
+    });
+    await _authController.signInUsers(context: context, email: email, password: password).whenComplete(() {
+      // _globalKey.currentState!.reset();
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +85,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         return null;
                       }
                     },
+                    inputFormatters: [
+                      lowerCaseTextFormatter()
+                    ],
                     decoration: InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
@@ -134,9 +151,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 20),
                   InkWell(
-                    onTap: () async {
+                    onTap: () {
                       if (_globalKey.currentState!.validate()) {
-                        await _authController.signInUsers(context: context, email: email, password: password);
+                        loginUser();
                       } else {
                         print("Failed");
                       }
@@ -258,8 +275,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color: const Color(0xFF103DE5)),
                                   ),
                                 )),
-                            const Center(
-                                child: Text(
+                            Center(
+                                child: isLoading? const CircularProgressIndicator(color: Colors.white,) : Text(
                               "Sign In",
                               style: TextStyle(
                                   fontSize: 20,
@@ -308,6 +325,18 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+
+
+class lowerCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: newValue.text.toLowerCase(),
+      selection: newValue.selection,
     );
   }
 }

@@ -19,10 +19,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late String email;
   late String fullName;
   late String password;
+  bool _isLoading = false;
 
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  // final TextEditingController nameController = TextEditingController();
+  // final TextEditingController emailController = TextEditingController();
+  // final TextEditingController passwordController = TextEditingController();
+
+  registerUser() async {
+    setState(() {
+      _isLoading = true;
+    });
+    await _authController.signUpUsers(context: context, email: email, fullName: fullName, password: password).whenComplete(() {
+      // _formKey.currentState!.reset();
+      setState(() {
+        // nameController.clear();
+        // emailController.clear();
+        // passwordController.clear();
+        _isLoading = false;
+      });
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +88,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onChanged: (value) {
                       email = value;
                     },
-                    controller: emailController,
+                    // controller: emailController,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your Email";
@@ -79,6 +96,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         return null;
                       }
                     },
+                    inputFormatters: [
+                      lowerCaseTextFormatter()
+                    ],
                     decoration: InputDecoration(
                         fillColor: Colors.white,
                         filled: true,
@@ -111,7 +131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onChanged: (value) {
                       fullName = value;
                     },
-                    controller: nameController,
+                    // controller: nameController,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your Full Name";
@@ -152,7 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     onChanged: (value) {
                       password = value;
                     },
-                    controller: passwordController,
+                    // controller: passwordController,
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Enter your Password";
@@ -194,10 +214,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   InkWell(
                     onTap: () async {
                       if (_formKey.currentState!.validate()) {
-                        await _authController.signUpUsers(context: context, email: email, fullName: fullName, password: password);
-                        nameController.clear();
-                        emailController.clear();
-                        passwordController.clear();
+                        registerUser();
                       }
                     },
                     child: Container(
@@ -317,8 +334,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     ),
                                   ),
                                 )),
-                            const Center(
-                                child: Text(
+                            Center(
+                                child: _isLoading? CircularProgressIndicator(color: Colors.white) : Text(
                                   "Sign Up",
                                   style: TextStyle(
                                       fontSize: 20,

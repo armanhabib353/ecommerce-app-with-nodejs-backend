@@ -1,4 +1,5 @@
 import 'package:arman_ecommerce_node_backend/view/screens/authentication/login_screen.dart';
+import 'package:arman_ecommerce_node_backend/view/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginScreen(),
+      home: MainScreen(),
     );
   }
 }

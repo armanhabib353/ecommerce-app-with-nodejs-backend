@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:arman_ecommerce_node_backend/global_variables.dart';
 import 'package:arman_ecommerce_node_backend/model/user.dart';
 import 'package:arman_ecommerce_node_backend/services/manage_http_response.dart';
+import 'package:arman_ecommerce_node_backend/view/screens/authentication/login_screen.dart';
+import 'package:arman_ecommerce_node_backend/view/screens/main_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class AuthController {
@@ -34,6 +37,7 @@ class AuthController {
           response: response,
           context: context,
           onSuccess: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
             showSnackBar(context, "Account has been Created for you");
           });
     } catch (e) {
@@ -63,8 +67,12 @@ class AuthController {
           });
 
       // Handle the response using the manage httpResponse
-      manageHttpResponse(response: response, context: context, onSuccess: () {});
-      showSnackBar(context, "Logged In");
+      manageHttpResponse(response: response, context: context, onSuccess: () {
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MainScreen()), (route) => false);
+        showSnackBar(context, "Logged In");
+      });
+
+
     } catch (e) {
       print("Error: $e");
     }
